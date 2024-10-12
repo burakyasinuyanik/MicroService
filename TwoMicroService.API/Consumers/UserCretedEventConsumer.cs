@@ -7,6 +7,7 @@ namespace TwoMicroService.API.Consumers
     {
         public Task Consume(ConsumeContext<UserCreatedEvent> context)
         {
+
             var message=context.Message;
 
             //var message = message with { Email = "fd" }

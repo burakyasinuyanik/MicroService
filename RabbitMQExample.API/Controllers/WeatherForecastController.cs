@@ -31,6 +31,11 @@ namespace RabbitMQExample.API.Controllers
             channel.ConfirmSelect();// kuyruða kesin kaydedilme doðrulamasý
 
             channel.QueueDeclare("Weather", true, false,false, null);
+
+            var properties=channel.CreateBasicProperties();
+            properties.Persistent = true;   //kalýcý olarak kaydetme
+
+
             //mandotory true seçilirse consumer tarafýna da iletildiði bilgisi gelir
             channel.BasicPublish("","",false,null,null);
             channel.WaitForConfirms();

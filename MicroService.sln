@@ -9,7 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TwoMicroService.API", "TwoM
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bus.Shared", "Bus.Shared\Bus.Shared.csproj", "{A5E1F4F5-1854-42E5-BE4B-EC25F2060D8E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RabbitMQExample.API", "RabbitMQExample.API\RabbitMQExample.API.csproj", "{C0F20AF3-E3AA-48AC-B209-54D9DB8F4D9F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RabbitMQExample.API", "RabbitMQExample.API\RabbitMQExample.API.csproj", "{C0F20AF3-E3AA-48AC-B209-54D9DB8F4D9F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WorkerService", "WorkerService\WorkerService.csproj", "{8EB0A6E4-B98C-4804-A39A-8DDF33C28760}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{C0F20AF3-E3AA-48AC-B209-54D9DB8F4D9F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C0F20AF3-E3AA-48AC-B209-54D9DB8F4D9F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C0F20AF3-E3AA-48AC-B209-54D9DB8F4D9F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8EB0A6E4-B98C-4804-A39A-8DDF33C28760}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8EB0A6E4-B98C-4804-A39A-8DDF33C28760}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8EB0A6E4-B98C-4804-A39A-8DDF33C28760}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8EB0A6E4-B98C-4804-A39A-8DDF33C28760}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
