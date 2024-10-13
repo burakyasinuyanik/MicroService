@@ -30,13 +30,20 @@ builder.Services.AddMassTransit(x =>
 
         });
 
+        //message tekrardan kuyruða gönderme hata alandýðýnda
         configure.UseDelayedRedelivery(x => x.Intervals(TimeSpan.FromHours(1), TimeSpan.FromHours(2)));
-        configure.PrefetchCount = 10;//
+
+     
+
+
+        configure.PrefetchCount = 10;// eþ zamanlý mesajý iþler
         configure.ConcurrentMessageLimit = 10;//mesajlarý ayný anda iþleme
         configure.UseInMemoryOutbox(context);//bir hata ile karþýlaþýðýnda 
 
         var connectionString = builder.Configuration.GetConnectionString("RabbitMQ");
         configure.Host(connectionString);
+
+
         //microservice.queueName.document kuyruk oluþturma iþlemi
         configure.ReceiveEndpoint("email-microservice.user-created.event.queue", c =>
         {

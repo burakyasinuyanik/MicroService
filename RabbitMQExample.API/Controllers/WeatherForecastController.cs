@@ -33,11 +33,12 @@ namespace RabbitMQExample.API.Controllers
             channel.QueueDeclare("Weather", true, false,false, null);
 
             var properties=channel.CreateBasicProperties();
-            properties.Persistent = true;   //kalýcý olarak kaydetme
+            properties.Persistent = true;   //kalýcý olarak kaydetme rwstar olursa mesaj gider
 
 
             //mandotory true seçilirse consumer tarafýna da iletildiði bilgisi gelir
             channel.BasicPublish("","",false,null,null);
+            //baþarýlý olana kadar dener
             channel.WaitForConfirms();
 
 
