@@ -9,7 +9,7 @@ namespace TwoMicroService.API.Consumers
         {
 
             var message=context.Message;
-
+          
             //var message = message with { Email = "fd" }
 
             Console.WriteLine($"Kullanıcı kaydedildi {message.Email}");
