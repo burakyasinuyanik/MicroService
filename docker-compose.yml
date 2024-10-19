@@ -1,0 +1,7 @@
+services:
+  docker.api:
+    image: dockerapi-image
+    container_name: dockerapi-container-v1
+    build:
+      context: .
+      dockerfile: Docker.Api/Dockerfile

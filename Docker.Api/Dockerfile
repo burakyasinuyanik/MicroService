@@ -1,40 +1,29 @@
+# See https://aka.ms/customizecontainer to learn how to customize your debug container and how Visual Studio uses this Dockerfile to build your images for faster debugging.
 
-
+# This stage is used when running from VS in fast mode (Default for Debug configuration)
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
-#root kullanýcý her yere eriþim güvenlik sebebi ilee app 80'e eriþim yok
 USER app
 WORKDIR /app
-#docker dýþýndan ulaþma
 EXPOSE 8080
 
 
-
-
+# This stage is used to build the service project
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
-#key value deðiþken
 ARG BUILD_CONFIGURATION=Release
-#dosya yolu
 WORKDIR /src
 COPY ["Docker.Api/Docker.Api.csproj", "Docker.Api/"]
-#paket kurulum iþlemleri
 RUN dotnet restore "./Docker.Api/Docker.Api.csproj"
-COPY . ./Docker.Api/
-#yeni dosya yolu
+COPY . .
 WORKDIR "/src/Docker.Api"
-#build etme iþlemi
 RUN dotnet build "./Docker.Api.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
-
-
+# This stage is used to publish the service project to be copied to the final stage
 FROM build AS publish
-#canlýdaymýþ gibi build
 ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "./Docker.Api.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false #exe oluþmasýný kapatýr
+RUN dotnet publish "./Docker.Api.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
 
-
-
+# This stage is used in production or when running from VS in regular mode (Default when not using the Debug configuration)
 FROM base AS final
 WORKDIR /app
-#yukardaki app'e kopyalama
 COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "Docker.Api.dll"]

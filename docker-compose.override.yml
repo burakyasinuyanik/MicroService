@@ -1,0 +1,14 @@
+services:
+  docker.api:
+    user: root 
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_HTTP_PORTS=8080
+    ports:
+      - "5000:8080"
+    volumes: 
+    - dockerapi-data:/app/wwwroot/images 
+volumes:
+  docker.api-data:
+   
+  
