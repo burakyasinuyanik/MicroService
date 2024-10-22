@@ -2,13 +2,20 @@
 using MassTransit;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using OneMicroService.API.Service;
 
 namespace OneMicroService.API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/[controller]/[action]")]
     [ApiController]
-    public class UserController(IPublishEndpoint publishEndpoint) : ControllerBase
+    public class UserController(IPublishEndpoint publishEndpoint,StockService stockService) : ControllerBase
     {
+        [HttpGet]
+        public async Task<IActionResult> GetStock() { 
+        var result=await stockService.GetStock();
+            return Ok(result);
+                }
+
         [HttpPost]
         public async Task<IActionResult> CreateUser()
         {

@@ -1,12 +1,14 @@
-using Docker.API.Service;
+﻿using Docker.API.Service;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Docker.Api.Controllers
+namespace Docker.API.Controllers
 {
-    [ApiController]
     [Route("api/[controller]/[action]")]
-    public class WeatherForecastController (StockService stockService): ControllerBase
+    [ApiController]
+    public class StockController(StockService stockService) : ControllerBase
     {
+
         [HttpGet]
         public async Task<IActionResult> GetStock()
         {

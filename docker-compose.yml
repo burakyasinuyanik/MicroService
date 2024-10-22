@@ -5,3 +5,9 @@ services:
     build:
       context: .
       dockerfile: Docker.Api/Dockerfile
+  docker2.api:
+    image: docker2api-image
+    container_name: docker2api-container-v1
+    build:
+      context: .
+      dockerfile: Docker2.Api/Dockerfile

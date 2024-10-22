@@ -1,4 +1,5 @@
 using MassTransit;
+using OneMicroService.API.Service;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,7 +18,10 @@ builder.Services.AddMassTransit(x =>
         configure.Host(connectionString);
     });
 });
-
+builder.Services.AddHttpClient<StockService>(x =>
+{
+    x.BaseAddress=new Uri(builder.Configuration.GetSection("MicroServices").GetSection("StockService")["BaseUrl"]);
+});
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

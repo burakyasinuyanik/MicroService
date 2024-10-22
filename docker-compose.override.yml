@@ -4,10 +4,17 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_HTTP_PORTS=8080
+      - MicroServices:StockService:BaseUrl=http://docker2.api:8080
     ports:
       - "5000:8080"
     volumes: 
-    - dockerapi-data:/app/wwwroot/images 
+    - docker.api-data:/app/wwwroot/images 
+  docker2.api:  
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_HTTP_PORTS=8080
+    ports:
+      - "5001:8080"
 volumes:
   docker.api-data:
    
