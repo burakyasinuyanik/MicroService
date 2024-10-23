@@ -30,8 +30,8 @@ builder.Services.AddHttpClient<StockService>(x =>
 
 static AsyncRetryPolicy<HttpResponseMessage> AddRetryPolicy()
 {
-    var result =HttpPolicyExtensions.HandleTransientHttpError()
-        .WaitAndRetryAsync(3,retry=>TimeSpan.FromSeconds(Math.Pow(3,retry)));
+    var result = HttpPolicyExtensions.HandleTransientHttpError()
+        .WaitAndRetryAsync(3, retry => TimeSpan.FromSeconds(Math.Pow(3, retry)));
     return result;
 }
 static AsyncCircuitBreakerPolicy<HttpResponseMessage> AddCircuitBreakerPolicy()
@@ -47,11 +47,11 @@ static AsyncTimeoutPolicy<HttpResponseMessage> AddTimeOutPolicy()
 }
 var app = builder.Build();
 
-using(var scope = app.Services.CreateScope())
-{
-    var dbContext= scope.ServiceProvider.GetService<AppDbContext>();
-    dbContext.Database.Migrate();
-}
+//using (var scope = app.Services.CreateScope())
+//{
+//    var dbContext = scope.ServiceProvider.GetService<AppDbContext>();
+//    dbContext.Database.Migrate();
+//}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
