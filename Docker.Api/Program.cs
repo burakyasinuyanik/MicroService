@@ -1,4 +1,6 @@
+using Docker.Api.Models;
 using Docker.API.Service;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Polly;
 using Polly.CircuitBreaker;
@@ -9,6 +11,11 @@ using Polly.Timeout;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+
+builder.Services.AddDbContext<AppDbContext>(x =>
+{
+    x.UseSqlServer(builder.Configuration.GetConnectionString("SqlServer"));
+});
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -39,6 +46,12 @@ static AsyncTimeoutPolicy<HttpResponseMessage> AddTimeOutPolicy()
     return result;
 }
 var app = builder.Build();
+
+using(var scope = app.Services.CreateScope())
+{
+    var dbContext= scope.ServiceProvider.GetService<AppDbContext>();
+    dbContext.Database.Migrate();
+}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

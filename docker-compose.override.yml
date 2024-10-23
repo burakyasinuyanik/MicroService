@@ -5,6 +5,7 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_HTTP_PORTS=8080
       - MicroServices:StockService:BaseUrl=http://docker2.api:8080
+      - ConnectionStrings:SqlServer=Server=localhost,1433;Database=DockerApi1Db;User=Sa; Password=Password12*; Trusted_Connection=False;TrustServerCertificate=True;IntegratedSercurity=False
     ports:
       - "5000:8080"
     volumes: 
@@ -17,5 +18,6 @@ services:
       - "5001:8080"
 volumes:
   docker.api-data:
+  sqlserver-data-dockerapi1:  
    
   
