@@ -1,4 +1,10 @@
 using Docker.API.Service;
+using Microsoft.Extensions.DependencyInjection;
+using Polly;
+using Polly.CircuitBreaker;
+using Polly.Extensions.Http;
+using Polly.Retry;
+using Polly.Timeout;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,7 +17,27 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddHttpClient<StockService>(x =>
 {
     x.BaseAddress = new Uri(builder.Configuration.GetSection("MicroServices").GetSection("StockService")["BaseUrl"]);
-});
+}).AddPolicyHandler(AddRetryPolicy())
+.AddPolicyHandler(AddCircuitBreakerPolicy())
+.AddPolicyHandler(AddTimeOutPolicy());
+
+static AsyncRetryPolicy<HttpResponseMessage> AddRetryPolicy()
+{
+    var result =HttpPolicyExtensions.HandleTransientHttpError()
+        .WaitAndRetryAsync(3,retry=>TimeSpan.FromSeconds(Math.Pow(3,retry)));
+    return result;
+}
+static AsyncCircuitBreakerPolicy<HttpResponseMessage> AddCircuitBreakerPolicy()
+{
+    var result = HttpPolicyExtensions.HandleTransientHttpError()
+        .CircuitBreakerAsync(3, TimeSpan.FromSeconds(15));
+    return result;
+}
+static AsyncTimeoutPolicy<HttpResponseMessage> AddTimeOutPolicy()
+{
+    var result = Policy.TimeoutAsync<HttpResponseMessage>(2);
+    return result;
+}
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

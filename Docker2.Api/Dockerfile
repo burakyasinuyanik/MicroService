@@ -11,7 +11,7 @@ EXPOSE 8080
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-COPY ["Docker.Api/Docker2.Api.csproj", "Docker2.Api/"]
+COPY ["Docker2.Api/Docker2.Api.csproj", "Docker2.Api/"]
 RUN dotnet restore "./Docker2.Api/Docker2.Api.csproj"
 COPY . .
 WORKDIR "/src/Docker2.Api"

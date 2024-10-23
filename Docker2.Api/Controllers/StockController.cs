@@ -10,6 +10,7 @@ namespace Docker2.Api.Controllers
         [HttpGet]
         public IActionResult GetStock()
         {
+            throw new Exception("db hatası");
             return Ok(new { count = 100 });
 
 
