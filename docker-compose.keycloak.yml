@@ -1,0 +1,89 @@
+services:
+ docker.api:
+    user: root
+    image: dockerapi-image
+    container_name: dockerapi-container-v1
+    build:
+      context: .
+      dockerfile: Docker.Api/Dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_HTTP_PORTS=8080
+      - MicroServices:StockService:BaseUrl=http://docker2.api:8080
+      - ConnectionStrings:SqlServer=Server=localhost,1433;Database=DockerApi1Db;User=Sa; Password=Password12*; Trusted_Connection=False;TrustServerCertificate=True;IntegratedSercurity=False
+    ports:
+      - "5000:8080"
+    volumes: 
+    - docker.api-data:/app/wwwroot/images 
+ docker2.api:
+    image: docker2api-image
+    container_name: docker2api-container-v1
+    build:
+      context: .
+      dockerfile: Docker2.Api/Dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_HTTP_PORTS=8080
+    ports:
+      - "5001:8080"
+ sqlserver.db:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: sqlserver.db
+    restart: always
+    environment:
+     SA_PASSWORD: Password12*
+     ACCEPT_EULA: "Y"
+    ports: 
+     - "1433:1433"
+    volumes:
+     - sqlserver-data-dockerapi1:/var/opt/mssql
+ keycloak:
+    restart: always
+    container_name: keycloak
+    image: quay.io/keycloak/keycloak:25.0
+    command: start
+    environment:
+      KC_HOSTNAME: localhost
+      KC_HOSTNAME_PORT: 8080
+      KC_HOSTNAME_STRICT_BACKCHANNEL: false
+      KC_HTTP_ENABLED: true
+      KC_HOSTNAME_STRICT_HTTPS: false
+      KC_HEALTH_ENABLED: true
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: Password12*
+      KC_DB: postgres
+      KC_DB_URL: jdbc:postgresql://postgres.identity.db/keycloak_db
+      KC_DB_USERNAME: admin
+      KC_DB_PASSWORD: Password12*
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres.identity.db
+ postgres.identity.db:
+    image: postgres:16.2
+    container_name: postgres.identity.db
+    restart: always
+    environment:
+      POSTGRES_DB: keycloak_db
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: Password12*
+    ports:
+      - "5432:5432"
+    volumes:
+      - keycloak-postgres-data:/var/lib/postgresql/data
+ postgres.identity.db.ui:
+    image: dpage/pgadmin4
+    container_name: postgres.identity.db.ui
+    restart: always
+    ports:
+      - "8888:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: user-name@domain-name.com
+      PGADMIN_DEFAULT_PASSWORD: strong-password
+    volumes:
+      - postgres-identity-db-ui-data:/var/lib/pgadmin
+volumes:
+  keycloak-postgres-data:    
+  sqlserver-data-dockerapi1:
+  postgres-identity-db-ui-data:
+  docker.api-data:  
