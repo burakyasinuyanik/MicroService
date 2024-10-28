@@ -1,4 +1,28 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.DataProtection;
+
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddDataProtection()
+    .PersistKeysToFileSystem(new DirectoryInfo(Path.Combine(Directory.GetCurrentDirectory(), "Keys")))
+    .SetDefaultKeyLifetime(TimeSpan.FromDays(10));
+
+builder.Services.AddHttpContextAccessor();
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(
+    JwtBearerDefaults.AuthenticationScheme, opts =>
+    {
+        opts.Authority = "http://localhost:8080/realms/MyCompany";
+        opts.RequireHttpsMetadata = false;
+        opts.Audience = "Weather-Microservice";
+
+
+        //opts.TokenValidationParameters = new TokenValidationParameters
+        //{
+        //    ValidateAudience = true,
+        //    ValidateLifetime = true,
+        //    ValidateIssuerSigningKey = true
+        //};
+    });
 
 // Add services to the container.
 
