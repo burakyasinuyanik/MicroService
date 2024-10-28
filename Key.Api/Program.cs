@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.DataProtection;
+using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDataProtection()
@@ -11,9 +12,9 @@ builder.Services.AddHttpContextAccessor();
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(
     JwtBearerDefaults.AuthenticationScheme, opts =>
     {
-        opts.Authority = "http://localhost:8080/realms/MyCompany";
+        opts.Authority = "http://localhost:8080/realms/Thisrak";
         opts.RequireHttpsMetadata = false;
-        opts.Audience = "Weather-Microservice";
+        opts.Audience = "weather-api";
 
 
         //opts.TokenValidationParameters = new TokenValidationParameters
@@ -39,6 +40,9 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+app.UseHttpsRedirection();
+
+app.UseAuthentication();
 
 app.UseAuthorization();
 

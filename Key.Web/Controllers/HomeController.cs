@@ -1,17 +1,16 @@
 using Key.Web.Models;
+using Key.Web.Services;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using System.Diagnostics;
 
 namespace Key.Web.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController( WeatherService weatherService) : Controller
     {
-        private readonly ILogger<HomeController> _logger;
-
-        public HomeController(ILogger<HomeController> logger)
-        {
-            _logger = logger;
-        }
+        
 
         public IActionResult Index()
         {
@@ -23,10 +22,28 @@ namespace Key.Web.Controllers
             return View();
         }
 
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
+       
+
+        [Authorize]
+        public IActionResult Secured()
         {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            var claims = User.Claims;
+
+
+            var token = HttpContext.GetTokenAsync(OpenIdConnectParameterNames.AccessToken).Result;
+
+
+
+
+
+            var refreshToken = HttpContext.GetTokenAsync(OpenIdConnectParameterNames.RefreshToken).Result;
+            return View();
+        }
+
+        public IActionResult WeatherForecastPage()
+        {
+            var response = weatherService.GetWeatherForecast();
+            return View();
         }
     }
 }

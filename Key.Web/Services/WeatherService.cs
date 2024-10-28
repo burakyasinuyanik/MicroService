@@ -8,7 +8,7 @@ namespace Key.Web.Services
         {
             var discoveryResponse =
                 await client.GetDiscoveryDocumentAsync(
-                    "http://localhost:8080/realms/MyCompany/.well-known/openid-configuration");
+                    "http://localhost:8080/realms/Thisrak/.well-known/openid-configuration");
 
             if (discoveryResponse.IsError)
             {
@@ -36,7 +36,7 @@ namespace Key.Web.Services
             client.SetBearerToken(tokenResponse.AccessToken!);
 
 
-            var response = await client.GetAsync("https://localhost:7101/WeatherForecast");
+            var response = await client.GetAsync("http://localhost:5062/WeatherForecast");
 
 
             if (!response.IsSuccessStatusCode)

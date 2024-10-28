@@ -18,7 +18,7 @@ namespace Key.Web.Services
         {
             var discoveryResponse =
                 await client.GetDiscoveryDocumentAsync(
-                    "http://localhost:8080/realms/MyCompany/.well-known/openid-configuration");
+                    "http://localhost:8080/realms/Thisrak/.well-known/openid-configuration");
 
             if (discoveryResponse.IsError)
             {

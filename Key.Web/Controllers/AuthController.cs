@@ -9,7 +9,7 @@ namespace Key.Web.Controllers
     {
         public async Task<IActionResult> Index()
         {
-            var username = "mehmet16";
+            var username = "burak";
             var password = "Password12*";
 
             var response = await authService.SignIn(username, password);
@@ -32,8 +32,8 @@ namespace Key.Web.Controllers
 
         //Claim based Authorization
 
-        [Authorize(Policy = "CityIstanbul")]
-        public async Task<IActionResult> IstanbulPage()
+        [Authorize(Policy = "city")]
+        public async Task<IActionResult> GetCity()
         {
             return View();
         }
