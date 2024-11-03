@@ -10,6 +10,11 @@
     <DockerServiceName>docker.api</DockerServiceName>
   </PropertyGroup>
   <ItemGroup>
+    <None Include="otel-collector-config.yaml" />
+    <None Include="docker-compose - Copy.override.yml">
+      <DependentUpon>docker-compose.yml</DependentUpon>
+    </None>
+    <None Include="docker-compose.telemetry.yml" />
     <None Include="docker-compose.keycloak.yml" />
     <None Include="docker-compose.override.yml">
       <DependentUpon>docker-compose.yml</DependentUpon>

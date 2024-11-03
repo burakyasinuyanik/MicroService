@@ -19,6 +19,8 @@ builder.Services.AddOpenTelemetry().WithTracing(o =>
 {
     //uygulama performansý küçük örneklem ile stabiletityi yakalama
     //o.SetSampler(new TraceIdRatioBasedSampler(2));
+    // o.SetSampler(new AlwaysOnSampler());
+
 
     o.AddSource("OpenTelemetryMicro1.Api.Source");
     o.AddAspNetCoreInstrumentation(o =>
