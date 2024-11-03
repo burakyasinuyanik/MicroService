@@ -17,9 +17,36 @@ builder.Services.AddDbContext<AppDbContext>(o =>
 
 builder.Services.AddOpenTelemetry().WithTracing(o =>
 {
+    //uygulama performansý küçük örneklem ile stabiletityi yakalama
+    //o.SetSampler(new TraceIdRatioBasedSampler(2));
+
     o.AddSource("OpenTelemetryMicro1.Api.Source");
-    o.AddAspNetCoreInstrumentation();
-    o.AddEntityFrameworkCoreInstrumentation();
+    o.AddAspNetCoreInstrumentation(o =>
+    {
+        o.RecordException = true;
+
+        o.EnrichWithHttpRequest = (activity, request) =>
+        {
+            var userId = 200;
+            activity.AddTag("userId", 200);
+        };
+
+
+        o.Filter = (context =>
+        {
+            return context.Request.Path.Value.Contains("api");
+        });
+    });
+    o.AddEntityFrameworkCoreInstrumentation(o =>
+    {
+        o.EnrichWithIDbCommand = (activity, command) =>
+        {
+            activity.AddTag("commandText", command.CommandText);
+        };
+        o.SetDbStatementForStoredProcedure = true;
+        o.SetDbStatementForText = true;
+        
+    });
     o.AddHttpClientInstrumentation();
     o.AddConsoleExporter();
 
@@ -51,8 +78,10 @@ app.MapGet("api/order", async (ILogger<Program> logger, AppDbContext context) =>
 
     context.orders.Add(new Order { Code = "123" });
     await context.SaveChangesAsync();
+    Activity.Current?.AddTag("orderCode", "123");
 
-    using (var activity = ActivitySourceProvider.Instance.CreateActivity("File yazma operasyonu", ActivityKind.Server))
+
+    using (var activity = ActivitySourceProvider.Instance.StartActivity("File yazma operasyonu", ActivityKind.Server))
     {
         var a = "Merhaba Dünya";
         File.WriteAllText("Example.txt",a);
