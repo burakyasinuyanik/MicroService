@@ -1,5 +1,8 @@
 using Microsoft.EntityFrameworkCore;
+using OpenTelemetry.Trace;
+using OpenTelemetryMicro1.Api;
 using OpenTelemetryMicro1.Api.Data;
+using System.Diagnostics;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,6 +14,20 @@ builder.Services.AddDbContext<AppDbContext>(o =>
 {
     o.UseSqlServer(builder.Configuration.GetConnectionString("SqlServer"));
 });
+
+builder.Services.AddOpenTelemetry().WithTracing(o =>
+{
+    o.AddSource("OpenTelemetryMicro1.Api.Source");
+    o.AddAspNetCoreInstrumentation();
+    o.AddEntityFrameworkCoreInstrumentation();
+    o.AddHttpClientInstrumentation();
+    o.AddConsoleExporter();
+
+    o.AddOtlpExporter();
+    //docker run --rm --name jaeger -p 4317:4317 -p 16686:16686 jaegertracing/all-in-one
+});
+
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -35,6 +52,12 @@ app.MapGet("api/order", async (ILogger<Program> logger, AppDbContext context) =>
     context.orders.Add(new Order { Code = "123" });
     await context.SaveChangesAsync();
 
+    using (var activity = ActivitySourceProvider.Instance.CreateActivity("File yazma operasyonu", ActivityKind.Server))
+    {
+        var a = "Merhaba Dünya";
+        File.WriteAllText("Example.txt",a);
+
+    }
 
     var userId = 99;
     logger.LogInformation("sipariþ end point çalýþtýr");
