@@ -1,4 +1,6 @@
 using Microsoft.EntityFrameworkCore;
+using OpenTelemetry.Logs;
+using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
 using OpenTelemetryMicro1.Api;
 using OpenTelemetryMicro1.Api.Data;
@@ -16,11 +18,11 @@ builder.Services.AddDbContext<AppDbContext>(o =>
 });
 
 builder.Services.AddOpenTelemetry().WithTracing(o =>
-{
+{   //docker-compose -f docker-compose.telemetry.yml up
     //uygulama performansý küçük örneklem ile stabiletityi yakalama
     //o.SetSampler(new TraceIdRatioBasedSampler(2));
     // o.SetSampler(new AlwaysOnSampler());
-
+    o.ConfigureResource(x => x.AddService("order.api", "1.0v"));
 
     o.AddSource("OpenTelemetryMicro1.Api.Source");
     o.AddAspNetCoreInstrumentation(o =>
@@ -54,6 +56,13 @@ builder.Services.AddOpenTelemetry().WithTracing(o =>
 
     o.AddOtlpExporter();
     //docker run --rm --name jaeger -p 4317:4317 -p 16686:16686 jaegertracing/all-in-one
+}).WithLogging(o =>
+{
+    o.ConfigureResource(x => x.AddService("order.api", "1.0v"));
+
+    o.AddConsoleExporter();
+
+    o.AddOtlpExporter();
 });
 
 
