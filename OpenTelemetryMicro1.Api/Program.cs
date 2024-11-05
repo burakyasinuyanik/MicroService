@@ -4,6 +4,7 @@ using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
 using OpenTelemetryMicro1.Api;
 using OpenTelemetryMicro1.Api.Data;
+using OpenTelemetryMicro1.Api.Services;
 using System.Diagnostics;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -12,6 +13,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddHttpClient<Micro2Service>();
 builder.Services.AddDbContext<AppDbContext>(o =>
 {
     o.UseSqlServer(builder.Configuration.GetConnectionString("SqlServer"));
@@ -19,6 +21,7 @@ builder.Services.AddDbContext<AppDbContext>(o =>
 
 builder.Services.AddOpenTelemetry().WithTracing(o =>
 {   //docker-compose -f docker-compose.telemetry.yml up
+    //docker run --rm --name jaeger -p 4317:4317 -p 16686:16686 jaegertracing/all-in-one
     //uygulama performansý küçük örneklem ile stabiletityi yakalama
     //o.SetSampler(new TraceIdRatioBasedSampler(2));
     // o.SetSampler(new AlwaysOnSampler());
@@ -28,6 +31,8 @@ builder.Services.AddOpenTelemetry().WithTracing(o =>
     o.AddAspNetCoreInstrumentation(o =>
     {
         o.RecordException = true;
+
+
 
         o.EnrichWithHttpRequest = (activity, request) =>
         {
@@ -49,21 +54,22 @@ builder.Services.AddOpenTelemetry().WithTracing(o =>
         };
         o.SetDbStatementForStoredProcedure = true;
         o.SetDbStatementForText = true;
-        
+
     });
     o.AddHttpClientInstrumentation();
     o.AddConsoleExporter();
 
     o.AddOtlpExporter();
     //docker run --rm --name jaeger -p 4317:4317 -p 16686:16686 jaegertracing/all-in-one
-}).WithLogging(o =>
-{
-    o.ConfigureResource(x => x.AddService("order.api", "1.0v"));
-
-    o.AddConsoleExporter();
-
-    o.AddOtlpExporter();
 });
+//    .WithLogging(o =>
+//{
+//    o.ConfigureResource(x => x.AddService("order.api", "1.0v"));
+
+//    o.AddConsoleExporter();
+
+//    o.AddOtlpExporter();
+//});
 
 
 var app = builder.Build();
@@ -80,12 +86,11 @@ var summaries = new[]
     "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
 };
 
-app.MapGet("api/order", async (ILogger<Program> logger, AppDbContext context) =>
+app.MapGet("api/order", async (ILogger<Program> logger, AppDbContext context,Micro2Service micro2Service) =>
 {
 
 
-    var client = new HttpClient();
-    var response = await client.GetAsync("https://www.google.com");
+    var response = await micro2Service.GetMicro2Data();
 
     context.orders.Add(new Order { Code = "123" });
     await context.SaveChangesAsync();
@@ -102,6 +107,8 @@ app.MapGet("api/order", async (ILogger<Program> logger, AppDbContext context) =>
     var userId = 99;
     logger.LogInformation("sipariþ end point çalýþtýr");
     logger.LogInformation("Sipariþ oluþtu,userId={userId}", userId);
+
+    return Results.Ok(response);
 });
 
 app.MapGet("/weatherforecast", () =>
