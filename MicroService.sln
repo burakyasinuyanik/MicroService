@@ -31,9 +31,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Key.Api", "Key.Api\Key.Api.
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Observability", "Observability", "{4A8B4BEB-00A8-4755-A431-ADFD33B0A439}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenTelemetryMicro1.Api", "OpenTelemetryMicro1.Api\OpenTelemetryMicro1.Api.csproj", "{3FE98239-9F75-4C4C-A25C-0729FA4ECECD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenTelemetryMicro1.Api", "OpenTelemetryMicro1.Api\OpenTelemetryMicro1.Api.csproj", "{3FE98239-9F75-4C4C-A25C-0729FA4ECECD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenTelemetryMicro2.Api", "OpenTelemetryMicro2.Api\OpenTelemetryMicro2.Api.csproj", "{E3822A6B-82EE-4455-A8C0-A92B0EB0102C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenTelemetryMicro2.Api", "OpenTelemetryMicro2.Api\OpenTelemetryMicro2.Api.csproj", "{E3822A6B-82EE-4455-A8C0-A92B0EB0102C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "GateWay", "GateWay", "{C704866C-2904-47A0-B2B7-2D9FF86597A1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GatewayMicroservice1.Api", "GatewayMicroservice1.Api\GatewayMicroservice1.Api.csproj", "{E27DD268-E751-4F77-9F2E-3D21F410A001}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gateway.Api", "Gateway.Api\Gateway.Api.csproj", "{2686E2E6-0A3A-4DBE-B402-242BE73D8F42}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -93,6 +99,14 @@ Global
 		{E3822A6B-82EE-4455-A8C0-A92B0EB0102C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E3822A6B-82EE-4455-A8C0-A92B0EB0102C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E3822A6B-82EE-4455-A8C0-A92B0EB0102C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E27DD268-E751-4F77-9F2E-3D21F410A001}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E27DD268-E751-4F77-9F2E-3D21F410A001}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E27DD268-E751-4F77-9F2E-3D21F410A001}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E27DD268-E751-4F77-9F2E-3D21F410A001}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2686E2E6-0A3A-4DBE-B402-242BE73D8F42}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2686E2E6-0A3A-4DBE-B402-242BE73D8F42}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2686E2E6-0A3A-4DBE-B402-242BE73D8F42}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2686E2E6-0A3A-4DBE-B402-242BE73D8F42}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -105,6 +119,8 @@ Global
 		{00112705-5F03-45E1-A62B-6FDC8856029A} = {F5443DEF-C338-444D-8422-19D4F1728878}
 		{3FE98239-9F75-4C4C-A25C-0729FA4ECECD} = {4A8B4BEB-00A8-4755-A431-ADFD33B0A439}
 		{E3822A6B-82EE-4455-A8C0-A92B0EB0102C} = {4A8B4BEB-00A8-4755-A431-ADFD33B0A439}
+		{E27DD268-E751-4F77-9F2E-3D21F410A001} = {C704866C-2904-47A0-B2B7-2D9FF86597A1}
+		{2686E2E6-0A3A-4DBE-B402-242BE73D8F42} = {C704866C-2904-47A0-B2B7-2D9FF86597A1}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {516BE355-4482-4094-B57A-6B8649AD0433}
